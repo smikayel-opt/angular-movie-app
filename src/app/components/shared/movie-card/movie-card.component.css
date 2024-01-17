@@ -35,7 +35,7 @@
   width: 100%;
   background: red;
   display: grid;
-  grid-template-row: auto auto;
+  grid-template-rows: auto auto;
   gap: 0.5ch;
   background: hsl(0 0% 100% / 0.5);
   backdrop-filter: blur(var(--blur));
