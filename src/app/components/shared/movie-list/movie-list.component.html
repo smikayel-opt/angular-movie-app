@@ -1,4 +1,5 @@
 <div>Popular movies</div>
+<app-search-bar (onSearch)="filter($event)"></app-search-bar>
 
 <div class="pagination-container">
   <span *ngIf="movieData"> {{ pageNumber }} / {{ movieData.total_pages }}</span>

@@ -5,18 +5,19 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { LoadingComponent } from '../loading/loading.component';
 import { MovieCardComponent } from '../movie-card/movie-card.component';
+import { SearchBarComponent } from '../search-bar/search-bar.component';
 
 @Component({
   selector: 'app-movie-list',
   standalone: true,
-  imports: [HttpClientModule, CommonModule, LoadingComponent, MovieCardComponent],
+  imports: [HttpClientModule, CommonModule, LoadingComponent, MovieCardComponent, SearchBarComponent],
   templateUrl: './movie-list.component.html',
   styleUrl: './movie-list.component.css',
 })
 export class MovieListComponent {
   movieData?: MovieList;
   pageNumber: number = 1;
-  isLoading:boolean = true;
+  isLoading: boolean = true;
 
   constructor(private movieService: MovieService) { }
 
@@ -33,7 +34,7 @@ export class MovieListComponent {
   }
 
   getNextPage() {
-    this.pageNumber += 1 
+    this.pageNumber += 1
     this.getMovies()
   }
 
@@ -43,4 +44,12 @@ export class MovieListComponent {
     this.getMovies()
   }
 
+  filter(searchKeyword: string) {
+    this.isLoading = true
+
+    this.movieService.searchByName(searchKeyword).subscribe((movieData) => {
+      this.movieData = movieData;
+      this.isLoading = false
+    });
+  }
 }
