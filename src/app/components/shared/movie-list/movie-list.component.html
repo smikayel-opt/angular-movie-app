@@ -1,0 +1,16 @@
+<div>Popular movies</div>
+
+<div class="pagination-container">
+  <span *ngIf="movieData"> {{ pageNumber }} / {{ movieData.total_pages }}</span>
+  <button (click)="getNextPage()">Next</button>
+  <button (click)="getPreviusPage()">Previous</button>
+  <app-loading *ngIf="isLoading"></app-loading>
+</div>
+
+<div *ngIf="!isLoading">
+  <div *ngIf="movieData" class="film-list">
+    <div *ngFor="let movie of movieData.results"  >
+      <app-movie-card [movie]="movie"></app-movie-card>
+    </div>
+  </div>
+</div>
