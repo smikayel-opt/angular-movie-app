@@ -51,11 +51,22 @@ export class MovieListComponent {
     this.getMovies()
   }
 
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes)
+  }
+
   filter(searchKeyword: string, page?: number) {
     this.isLoading = true
     this.searchKeyword = searchKeyword
+
     if (!page) {
       this.pageNumber = 1
+    }
+    if (!searchKeyword) {
+      this.pageNumber = 1
+      this.getMovies()
+      return
     }
     this.movieService.searchByName(searchKeyword, page).subscribe((movieData) => {
       this.movieData = movieData;
