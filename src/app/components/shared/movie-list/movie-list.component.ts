@@ -18,6 +18,7 @@ export class MovieListComponent {
   movieData?: MovieList;
   pageNumber: number = 1;
   isLoading: boolean = true;
+  searchKeyword: string = '';
 
   constructor(private movieService: MovieService) { }
 
@@ -27,13 +28,19 @@ export class MovieListComponent {
 
   getMovies() {
     this.isLoading = true
-    this.movieService.getByPage(this.pageNumber).subscribe((movieData) => {
-      this.movieData = movieData;
-      this.isLoading = false
-    });
+
+    if (this.searchKeyword) {
+      this.filter(this.searchKeyword, this.pageNumber)
+    } else {
+      this.movieService.getByPage(this.pageNumber).subscribe((movieData) => {
+        this.movieData = movieData;
+        this.isLoading = false
+      });
+    }
   }
 
   getNextPage() {
+    if (this.movieData && this.pageNumber >= this.movieData?.total_pages) return
     this.pageNumber += 1
     this.getMovies()
   }
@@ -44,10 +51,13 @@ export class MovieListComponent {
     this.getMovies()
   }
 
-  filter(searchKeyword: string) {
+  filter(searchKeyword: string, page?: number) {
     this.isLoading = true
-
-    this.movieService.searchByName(searchKeyword).subscribe((movieData) => {
+    this.searchKeyword = searchKeyword
+    if (!page) {
+      this.pageNumber = 1
+    }
+    this.movieService.searchByName(searchKeyword, page).subscribe((movieData) => {
       this.movieData = movieData;
       this.isLoading = false
     });
