@@ -4,6 +4,10 @@ import { BehaviorSubject, of } from 'rxjs';
 import { MovieDetailsComponent } from './movie-details.component';
 import { MovieService } from '../../../services/movie/movie-service.service';
 
+
+/**
+ * same goes here check Loading component test file.
+ */
 describe('MovieDetailsComponent', () => {
   let component: MovieDetailsComponent;
   let fixture: ComponentFixture<MovieDetailsComponent>;

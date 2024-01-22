@@ -26,7 +26,11 @@ export class MovieDetailsComponent {
   });
   }
 
-  getMovie(id: number) {
+  /**
+   * 
+   * @param id 
+   */
+  getMovie(id: number): void {
     this.movieService.getById(id).subscribe((movie) => {
       this.movie = movie;
     });

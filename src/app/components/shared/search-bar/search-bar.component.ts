@@ -12,7 +12,10 @@ export class SearchBarComponent {
   searchKeyword: string = ''
   @Output() onSearch = new EventEmitter<string>();
 
-  search() {
+  /**
+   * 
+   */
+  search(): void {
     this.onSearch.emit(this.searchKeyword)
   }
 }

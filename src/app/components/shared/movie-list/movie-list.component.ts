@@ -1,4 +1,5 @@
-import { Component, SimpleChanges } from '@angular/core';
+import { Component, SimpleChanges, OnInit, OnChanges } from '@angular/core';
+
 import { MovieList } from '../../../interfaces/movie.interface';
 import { MovieService } from '../../../services/movie/movie-service.service';
 import { CommonModule } from '@angular/common';
@@ -14,9 +15,10 @@ import { SearchBarComponent } from '../search-bar/search-bar.component';
   templateUrl: './movie-list.component.html',
   styleUrl: './movie-list.component.css',
 })
-export class MovieListComponent {
+export class MovieListComponent implements OnInit, OnChanges{
   movieData?: MovieList;
   pageNumber: number = 1;
+  searchPageNumber: number = 1;
   isLoading: boolean = true;
   searchKeyword: string = '';
 
@@ -26,37 +28,58 @@ export class MovieListComponent {
     this.getMovies()
   }
 
-  getMovies() {
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes)
+  }
+
+  /**
+   * 
+   */
+  getMovies(): void {
+    // I don't mind using a method for multiple purposes, but in the future try to think that every method has a single purpose
+    // you may find that thinking in your project.
+
+    // missing semi-colons...
     this.isLoading = true
 
     if (this.searchKeyword) {
       this.filter(this.searchKeyword, this.pageNumber)
     } else {
-      this.movieService.getByPage(this.pageNumber).subscribe((movieData) => {
+      this.movieService.getByPage(this.pageNumber).subscribe((movieData) => { // type for movieData
         this.movieData = movieData;
         this.isLoading = false
       });
     }
   }
 
-  getNextPage() {
+  /**
+   * 
+   */
+  getNextPage(): void {
     if (this.movieData && this.pageNumber >= this.movieData?.total_pages) return
     this.pageNumber += 1
     this.getMovies()
   }
 
-  getPreviusPage() {
+  /**
+   * 
+   */
+  getPreviusPage(): void { // spell
     if (this.pageNumber == 1) return // to stop realoading of the content 
+    // I believe no need to use Math.max (this.pageNumber -=1 will be good) unless there is a case I'm not aware of
     this.pageNumber = Math.max(1, this.pageNumber - 1);
+
     this.getMovies()
   }
 
+  /**
+   * 
+   * @param searchKeyword 
+   * @param page 
+   */
+  filter(searchKeyword: string, page?: number): void { // 
+    // missing semi-colons...
 
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes)
-  }
-
-  filter(searchKeyword: string, page?: number) {
     this.isLoading = true
     this.searchKeyword = searchKeyword
 
@@ -68,7 +91,7 @@ export class MovieListComponent {
       this.getMovies()
       return
     }
-    this.movieService.searchByName(searchKeyword, page).subscribe((movieData) => {
+    this.movieService.searchByName(searchKeyword, page).subscribe((movieData) => { // type for movieData
       this.movieData = movieData;
       this.isLoading = false
     });

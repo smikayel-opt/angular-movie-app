@@ -1,3 +1,8 @@
+/* I will not judge the styling because each project has its own standards only tips,
+  - try not use very much variables into your styling (100%, px)
+  - if you want that try to use scss files instead.
+ */
+
 * {
   box-sizing: border-box;
 }

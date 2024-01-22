@@ -12,15 +12,28 @@ export class MovieService {
 
   constructor(private http: HttpClient) { }
 
+  /**
+   * 
+   * @param pageNumber 
+   */
   getByPage(pageNumber: number): Observable<MovieList> {
     const query = `/movie/popular?api_key=${this.API_KEY}`
     return this.http.get<MovieList>(this.API_URL + query + `&page=${pageNumber}`)
   }
 
+  /**
+   * 
+   * @param id 
+   */
   getById(id: number) {
     return this.http.get<Movie>(this.API_URL + '/movie/' + id + `?api_key=${this.API_KEY}`)
   }
 
+  /**
+   * 
+   * @param query 
+   * @param page 
+   */
   searchByName(query: string, page?: number) {
     const params = page ? `/search/movie?query=${query}&page=${page}` : `/search/movie?query=${query}`
     return this.http.get<MovieList>(this.API_URL + params + `&api_key=${this.API_KEY}`)

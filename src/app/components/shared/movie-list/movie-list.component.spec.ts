@@ -2,6 +2,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MovieListComponent } from './movie-list.component';
 
+/**
+ * same goes here check Loading component test file
+ */
 describe('MovieListComponent', () => {
   let component: MovieListComponent;
   let fixture: ComponentFixture<MovieListComponent>;
