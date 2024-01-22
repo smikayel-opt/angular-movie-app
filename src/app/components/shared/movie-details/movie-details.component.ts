@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [HttpClientModule, CommonModule],
   templateUrl: './movie-details.component.html',
-  styleUrl: './movie-details.component.css'
+  styleUrl: './movie-details.component.scss'
 })
 export class MovieDetailsComponent {
   movie?: Movie;
@@ -23,7 +23,7 @@ export class MovieDetailsComponent {
     this.route.paramMap.subscribe(params => {
       const movieId = Number(params.get('id'));
       this.getMovie(movieId)
-  });
+    });
   }
 
   /**

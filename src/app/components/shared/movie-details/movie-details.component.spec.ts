@@ -1,35 +1,15 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { ActivatedRoute, ParamMap, convertToParamMap } from '@angular/router';
-import { BehaviorSubject, of } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
 import { MovieDetailsComponent } from './movie-details.component';
 import { MovieService } from '../../../services/movie/movie-service.service';
 
-
-/**
- * same goes here check Loading component test file.
- */
 describe('MovieDetailsComponent', () => {
   let component: MovieDetailsComponent;
-  let fixture: ComponentFixture<MovieDetailsComponent>;
   let movieService: jasmine.SpyObj<MovieService>;
   let activatedRoute: ActivatedRoute;
 
-  beforeEach(waitForAsync(() => {
-    movieService = jasmine.createSpyObj('MovieService', ['getById']);
-
-    TestBed.configureTestingModule({
-      imports: [MovieDetailsComponent],
-      providers: [
-        { provide: ActivatedRoute, useValue: { paramMap: of(convertToParamMap({ id: '1' })) } },
-        { provide: MovieService, useValue: movieService },
-      ],
-    }).compileComponents();
-  }));
-
   beforeEach(() => {
-    fixture = TestBed.createComponent(MovieDetailsComponent);
-    component = fixture.componentInstance;
-    activatedRoute = TestBed.inject(ActivatedRoute);
+    component = new MovieDetailsComponent(activatedRoute, movieService);
   });
 
   it('should create the component', () => {
@@ -51,5 +31,5 @@ describe('MovieDetailsComponent', () => {
     expect(movieService.getById).toHaveBeenCalledWith(1);
     expect(component.movie).toEqual(mockMovie);
   });
-  
+
 });

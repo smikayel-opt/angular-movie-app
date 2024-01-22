@@ -3,23 +3,26 @@
 
 <div class="pagination-container">
   <span *ngIf="movieData"> {{ pageNumber }} / {{ movieData.total_pages }}</span>
-  <button (click)="getNextPage()">Next</button> <!-- disable the button if we are on the last page  -->
-  <button (click)="getPreviusPage()">Previous</button><!-- disable the button if we are on the first page  -->
+  <button
+    class="pagination-button"
+    (click)="getPreviousPage()"
+    [disabled]="pageNumber == 1"
+  >
+    Previous
+  </button>
+  <button
+    class="pagination-button"
+    (click)="getNextPage()"
+    [disabled]="pageNumber >= (movieData?.total_pages ?? 1)"
+  >
+    Next
+  </button>
+
   <app-loading *ngIf="isLoading"></app-loading>
 </div>
 
-<!-- you can combine the two condition with on div
-  <div *ngIf="!isLoading && movieData" class="film-list">
-    <div *ngFor="let movie of movieData.results"  >
-      <app-movie-card [movie]="movie"></app-movie-card>
-    </div>
-  </div>
--->
-
-<div *ngIf="!isLoading">
-  <div *ngIf="movieData" class="film-list">
-    <div *ngFor="let movie of movieData.results"  >
-      <app-movie-card [movie]="movie"></app-movie-card>
-    </div>
+<div *ngIf="movieData && !isLoading" class="film-list">
+  <div *ngFor="let movie of movieData.results">
+    <app-movie-card [movie]="movie"></app-movie-card>
   </div>
 </div>

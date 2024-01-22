@@ -1,8 +1,3 @@
-/* I will not judge the styling because each project has its own standards only tips,
-  - try not use very much variables into your styling (100%, px)
-  - if you want that try to use scss files instead.
- */
-
 * {
   box-sizing: border-box;
 }
@@ -66,7 +61,6 @@
   place-items: center;
   border-radius: 0.5rem;
   background: hsl(0 0% 100% / 0.5);
-/*   backdrop-filter: blur(calc(var(--blur) * 0.5)); */
   transition: transform 0.2s;
 }
 

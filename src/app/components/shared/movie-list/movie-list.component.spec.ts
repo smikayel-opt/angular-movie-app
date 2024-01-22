@@ -1,23 +1,13 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { MovieListComponent } from './movie-list.component';
+import { MovieService } from '../../../services/movie/movie-service.service';
 
-/**
- * same goes here check Loading component test file
- */
+
 describe('MovieListComponent', () => {
   let component: MovieListComponent;
-  let fixture: ComponentFixture<MovieListComponent>;
+  let movieService: jasmine.SpyObj<MovieService>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [MovieListComponent]
-    })
-    .compileComponents();
-    
-    fixture = TestBed.createComponent(MovieListComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  beforeEach(() => {
+    component = new MovieListComponent(movieService);
   });
 
   it('should create', () => {

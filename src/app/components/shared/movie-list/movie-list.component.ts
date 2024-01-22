@@ -1,6 +1,6 @@
 import { Component, SimpleChanges, OnInit, OnChanges } from '@angular/core';
 
-import { MovieList } from '../../../interfaces/movie.interface';
+import { Movie, MovieList } from '../../../interfaces/movie.interface';
 import { MovieService } from '../../../services/movie/movie-service.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -13,9 +13,9 @@ import { SearchBarComponent } from '../search-bar/search-bar.component';
   standalone: true,
   imports: [HttpClientModule, CommonModule, LoadingComponent, MovieCardComponent, SearchBarComponent],
   templateUrl: './movie-list.component.html',
-  styleUrl: './movie-list.component.css',
+  styleUrl: './movie-list.component.scss',
 })
-export class MovieListComponent implements OnInit, OnChanges{
+export class MovieListComponent implements OnInit {
   movieData?: MovieList;
   pageNumber: number = 1;
   searchPageNumber: number = 1;
@@ -28,28 +28,15 @@ export class MovieListComponent implements OnInit, OnChanges{
     this.getMovies()
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes)
-  }
-
   /**
    * 
    */
   getMovies(): void {
-    // I don't mind using a method for multiple purposes, but in the future try to think that every method has a single purpose
-    // you may find that thinking in your project.
-
-    // missing semi-colons...
     this.isLoading = true
-
-    if (this.searchKeyword) {
-      this.filter(this.searchKeyword, this.pageNumber)
-    } else {
-      this.movieService.getByPage(this.pageNumber).subscribe((movieData) => { // type for movieData
-        this.movieData = movieData;
-        this.isLoading = false
-      });
-    }
+    this.movieService.getByPage(this.pageNumber).subscribe((movieData: MovieList) => { // type for movieData
+      this.movieData = movieData;
+      this.isLoading = false
+    });
   }
 
   /**
@@ -58,17 +45,23 @@ export class MovieListComponent implements OnInit, OnChanges{
   getNextPage(): void {
     if (this.movieData && this.pageNumber >= this.movieData?.total_pages) return
     this.pageNumber += 1
+    if (this.searchKeyword) {
+      this.filter(this.searchKeyword, this.pageNumber)
+      return
+    }
     this.getMovies()
   }
 
   /**
    * 
    */
-  getPreviusPage(): void { // spell
+  getPreviousPage(): void {
     if (this.pageNumber == 1) return // to stop realoading of the content 
-    // I believe no need to use Math.max (this.pageNumber -=1 will be good) unless there is a case I'm not aware of
-    this.pageNumber = Math.max(1, this.pageNumber - 1);
-
+    this.pageNumber = this.pageNumber - 1
+    if (this.searchKeyword) {
+      this.filter(this.searchKeyword, this.pageNumber)
+      return
+    }
     this.getMovies()
   }
 
@@ -77,9 +70,7 @@ export class MovieListComponent implements OnInit, OnChanges{
    * @param searchKeyword 
    * @param page 
    */
-  filter(searchKeyword: string, page?: number): void { // 
-    // missing semi-colons...
-
+  filter(searchKeyword: string, page?: number): void {
     this.isLoading = true
     this.searchKeyword = searchKeyword
 
@@ -91,7 +82,7 @@ export class MovieListComponent implements OnInit, OnChanges{
       this.getMovies()
       return
     }
-    this.movieService.searchByName(searchKeyword, page).subscribe((movieData) => { // type for movieData
+    this.movieService.searchByName(searchKeyword, page).subscribe((movieData: MovieList) => {
       this.movieData = movieData;
       this.isLoading = false
     });

@@ -1,6 +1,5 @@
 <div class="card__container">
-  <!-- use angular routing for navigation not anchor tag, we don't want refresh in our app-->
-  <a *ngIf="movie" href="{{movie.id}}" class="card">
+  <a *ngIf="movie" routerLink="/{{movie.id}}" class="card">
     <img
       src="https://image.tmdb.org/t/p/w500{{movie.poster_path}}"
       alt="balloon with an emoji face"
