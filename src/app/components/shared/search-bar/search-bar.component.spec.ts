@@ -24,6 +24,7 @@ describe('SearchBarComponent', () => {
   it('should reset searchKeyword after calling search method', () => {
     component.searchKeyword = 'test keyword';
     component.search();
+
     expect(component.searchKeyword).toBe('test keyword');
   });
 });

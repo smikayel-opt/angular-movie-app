@@ -33,6 +33,7 @@ export class MovieListComponent implements OnInit {
    */
   getMovies(): void {
     this.isLoading = true
+
     this.movieService.getByPage(this.pageNumber).subscribe((movieData: MovieList) => { // type for movieData
       this.movieData = movieData;
       this.isLoading = false
