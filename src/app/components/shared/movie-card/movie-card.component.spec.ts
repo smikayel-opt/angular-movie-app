@@ -9,4 +9,5 @@ describe('MovieCardComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  
 });

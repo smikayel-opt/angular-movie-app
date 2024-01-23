@@ -1,7 +1,8 @@
-import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
 import { MovieDetailsComponent } from './movie-details.component';
 import { MovieService } from '../../../services/movie/movie-service.service';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
+import { mockMovieData } from '../../../services/movie/movie-service.service.spec';
 
 describe('MovieDetailsComponent', () => {
   let component: MovieDetailsComponent;
@@ -9,6 +10,14 @@ describe('MovieDetailsComponent', () => {
   let activatedRoute: ActivatedRoute;
 
   beforeEach(() => {
+    movieService = jasmine.createSpyObj('MovieService', ['getById']);
+    activatedRoute = {
+      paramMap: of({
+        get: (param: string) => '1' // Simulate the route param 'id'
+      })
+    } as ActivatedRoute;
+
+
     component = new MovieDetailsComponent(activatedRoute, movieService);
   });
 
@@ -16,20 +25,27 @@ describe('MovieDetailsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call getMovie on ngOnInit', () => {
+  it('should call getMovie when ngOnInit is called', () => {
     spyOn(component, 'getMovie');
     component.ngOnInit();
     expect(component.getMovie).toHaveBeenCalled();
   });
 
   it('should call movieService.getById with the correct movieId', () => {
-    const mockMovie = { "adult": false, "backdrop_path": "/oQ429AcD85ttxvOxAaYpETnAsW0.jpg", "genre_ids": [28, 10752], "id": 918692, "original_language": "ru", "original_title": "Гранит", "overview": "Mozambique requests from Russia is being helped in the fight against militants of the \"Islamic State\" and a special group led by a commander with the call sign Granit is coming to the country.", "popularity": 589.618, "poster_path": "/zLJn4U2qlWIzlFP5SsyFJUDQjfs.jpg", "release_date": "2021-12-29", "title": "Granit", "video": false, "vote_average": 5.8, "vote_count": 5 }
-    movieService.getById.and.returnValue(of(mockMovie));
+    movieService.getById.and.returnValue(of(mockMovieData));
 
     component.getMovie(1);
 
     expect(movieService.getById).toHaveBeenCalledWith(1);
-    expect(component.movie).toEqual(mockMovie);
+    expect(component.movie).toEqual(mockMovieData);
+  });
+
+  it('should set the movie property when getMovie is called', () => {
+    movieService.getById.and.returnValue(of(mockMovieData));
+
+    component.getMovie(1);
+
+    expect(component.movie).toEqual(mockMovieData);
   });
 
 });
