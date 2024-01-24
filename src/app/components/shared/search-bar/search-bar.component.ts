@@ -13,7 +13,7 @@ export class SearchBarComponent {
   @Output() onSearch = new EventEmitter<string>();
 
   /**
-   * 
+   *  it will emit the search Keyword so in parrent we can make filter with the keyword 
    */
   search(): void {
     this.onSearch.emit(this.searchKeyword)

@@ -1,7 +1,6 @@
 import Spy = jasmine.Spy;
 
 import { MovieDetailsComponent } from './movie-details.component';
-import { MovieService } from '../../../services/movie/movie-service.service';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { mockMovieData } from '../../../services/movie/movie-service.service.spec';
@@ -9,7 +8,6 @@ import { mockMovieService } from '../../../services/movie/movie-service.service.
 
 describe('MovieDetailsComponent', () => {
   let component: MovieDetailsComponent;
-  let movieService: jasmine.SpyObj<MovieService>;
   let activatedRoute: ActivatedRoute;
 
   beforeEach(() => {
@@ -41,14 +39,6 @@ describe('MovieDetailsComponent', () => {
     component.getMovie(1);
 
     expect(component.movieService.getById).toHaveBeenCalledWith(1);
-    expect(component.movie).toEqual(mockMovieData);
-  });
-
-  it('should set the movie property when getMovie is called', () => {
-    (component.movieService.getById as Spy).and.returnValue(of(mockMovieData));
-
-    component.getMovie(1);
-
     expect(component.movie).toEqual(mockMovieData);
   });
 

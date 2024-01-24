@@ -28,7 +28,7 @@ export class MovieDetailsComponent {
   }
 
   /**
-   * 
+   * will get detailed movie from movieService with the movie ID
    * @param id 
    */
   getMovie(id: number): void {

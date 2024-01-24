@@ -2,6 +2,7 @@ import { MovieListComponent } from './movie-list.component';
 import { MovieService } from '../../../services/movie/movie-service.service';
 import { of } from 'rxjs';
 import { mockMoviesList } from '../../../services/movie/movie-service.service.spec';
+import { MovieList } from '../../../interfaces/movie.interface';
 
 describe('MovieListComponent', () => {
   let component: MovieListComponent;
@@ -42,7 +43,7 @@ describe('MovieListComponent', () => {
 
   it('should not fetch the next page if the last page is reached', () => {
     component.pageNumber = 2;
-    component.movieData = { total_pages: 2 } as any; // simulate last page
+    component.movieData = { total_pages: 2 } as MovieList; // simulate last page
     component.getNextPage();
     expect(component.movieData).not.toEqual(mockMoviesList);
     expect(movieService.getByPage).not.toHaveBeenCalled();

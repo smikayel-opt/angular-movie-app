@@ -29,7 +29,9 @@ export class MovieListComponent implements OnInit {
   }
 
   /**
-   * 
+   * it will call movie Service and will return the MovieList data
+   * on start will change the loading true, after the data fetching 
+   * loading will be false
    */
   getMovies(): void {
     this.isLoading = true
@@ -41,7 +43,8 @@ export class MovieListComponent implements OnInit {
   }
 
   /**
-   * 
+   * will increment page and will fetch data for the filtration, or if there is no keyword for filtration
+   * it will call the getMovies which will fetch the next page for current results
    */
   getNextPage(): void {
     if (this.movieData && this.pageNumber >= this.movieData?.total_pages) return
@@ -54,7 +57,8 @@ export class MovieListComponent implements OnInit {
   }
 
   /**
-   * 
+   * will decrement page and will fetch data for the filtration, or if there is no keyword for filtration
+   * it will call the getMovies which will fetch the previous page for current results
    */
   getPreviousPage(): void {
     if (this.pageNumber == 1) return // to stop realoading of the content 
@@ -67,7 +71,7 @@ export class MovieListComponent implements OnInit {
   }
 
   /**
-   * 
+   * filtration for filtering the movie results with API service
    * @param searchKeyword 
    * @param page 
    */
