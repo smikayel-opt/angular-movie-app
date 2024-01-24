@@ -113,5 +113,29 @@ describe('MovieListComponent', () => {
       expect(component.pageNumber).toBe(1);
       expect(movieService.getByPage).toHaveBeenCalledWith(1);
     });
+
+    it('should call filter with the correct parameters when getNextPage is called with searchKeyword', () => {
+      component.pageNumber = 1;
+      component.searchKeyword = 'testKeyword';
+      movieService.searchByName.and.returnValue(of(mockMoviesList));
+
+      spyOn(component, 'filter');
+
+      component.getNextPage();
+      expect(component.pageNumber).toBe(2);
+      expect(component.filter).toHaveBeenCalled();
+    });
+
+    it('should call filter with the correct parameters when getPreviousPage is called with searchKeyword', () => {
+      component.pageNumber = 2;
+      component.searchKeyword = 'testKeyword';
+      movieService.searchByName.and.returnValue(of(mockMoviesList));
+
+      spyOn(component, 'filter');
+
+      component.getPreviousPage();
+      expect(component.pageNumber).toBe(1);
+      expect(component.filter).toHaveBeenCalled();
+    });
   });
 });
