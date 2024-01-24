@@ -5,6 +5,6 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './loading.component.html',
-  styleUrl: './loading.component.css'
+  styleUrl: './loading.component.scss'
 })
 export class LoadingComponent { }

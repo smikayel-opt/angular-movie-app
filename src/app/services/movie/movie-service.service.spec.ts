@@ -1,73 +1,105 @@
-import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+
+
+import { HttpClient } from '@angular/common/http';
 import { MovieService } from './movie-service.service';
+import { of as observableOf, throwError } from 'rxjs';
+import Spy = jasmine.Spy;
+
 import { Movie, MovieList } from '../../interfaces/movie.interface';
-import * as mockData from './mock-data.json';
-import * as mockMovieDataByPage from './movie-data-by-page.json';
-import * as mockMovieDataByMovieId from './mock-data-by-movie-id.json';
+
+
+export const mockMoviesList: MovieList = {
+  page: 1,
+  results: [{ "adult": false, "backdrop_path": "/rDsT0UnHiA3HGJvb0TacQbdsdfv.jpg", "genre_ids": [28], "id": 109088, "original_language": "zh", "original_title": "方世玉與胡惠乾", "overview": "any overview", "popularity": 5.025, "poster_path": "/yXl2BPZHsmhuUgl8hUic430UsNd.jpg", "release_date": "1976-06-18", "title": "The Shaolin Avengers", "video": false, "vote_average": 6.0, "vote_count": 12 }] as Movie[],
+  total_pages: 2,
+  total_results: 5,
+};
+
+export const mockMovieData: Movie = { "adult": false, "backdrop_path": "/rDsT0UnHiA3HGJvb0TacQbdsdfv.jpg", "genre_ids": [28], "id": 109088, "original_language": "zh", "original_title": "方世玉與胡惠乾", "overview": "any overview", "popularity": 5.025, "poster_path": "/yXl2BPZHsmhuUgl8hUic430UsNd.jpg", "release_date": "1976-06-18", "title": "The Shaolin Avengers", "video": false, "vote_average": 6.0, "vote_count": 12 }
 
 
 describe('MovieService', () => {
-  let movieService: MovieService;
-  let httpTestingController: HttpTestingController;
+  let service: MovieService;
+  let mockHttp: HttpClient;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [MovieService]
-    });
-
-    movieService = TestBed.inject(MovieService);
-    httpTestingController = TestBed.inject(HttpTestingController);
-  });
-
-  afterEach(() => {
-    httpTestingController.verify();
+    mockHttp = jasmine.createSpyObj('HttpClient', ['get']);
+    service = new MovieService(mockHttp);
   });
 
   it('should be created', () => {
-    expect(movieService).toBeTruthy();
+    expect(service).toBeTruthy();
   });
 
-  it('should get popular movies by page', () => {
-    const pageNumber = 1;
-    const expectedUrl = `https://api.themoviedb.org/3/movie/popular?api_key=f82ecbb7a5110caecaee2bee5e4c79d6&page=${pageNumber}`;
-    const mockMovieList: MovieList = mockMovieDataByPage
+  describe('getByPage', () => {
+    it('should get movies by page', () => {
+      (mockHttp.get as Spy).and.returnValue(observableOf(mockMoviesList));
 
-    movieService.getByPage(pageNumber).subscribe((result) => {
-      expect(result).toEqual(mockMovieList);
+      service.getByPage(1).subscribe((moviesList: MovieList) => {
+        expect(moviesList.results[0].title).toEqual('The Shaolin Avengers');
+        expect(moviesList.results[0].overview).toEqual('any overview');
+      });
     });
 
-    const req = httpTestingController.expectOne(expectedUrl);
-    expect(req.request.method).toEqual('GET');
-    req.flush(mockMovieList);
+    it('should handle errors when getting movies by page', () => {
+      const errorMessage = 'Error fetching movies by page';
+      (mockHttp.get as Spy).and.returnValue(throwError(errorMessage));
+
+      service.getByPage(1).subscribe(
+        () => fail('Should have thrown an error'),
+        (error) => expect(error).toEqual(errorMessage)
+      );
+    });
   });
 
-  it('should get movie by ID', () => {
-    const movieId = 123;
-    const expectedUrl = `https://api.themoviedb.org/3/movie/${movieId}?api_key=f82ecbb7a5110caecaee2bee5e4c79d6`;
-    const mockMovie: Movie = mockMovieDataByMovieId
+  describe('getById', () => {
+    it('should get movie by ID', () => {
+      (mockHttp.get as Spy).and.returnValue(observableOf(mockMovieData));
 
-    movieService.getById(movieId).subscribe((result) => {
-      expect(result).toEqual(mockMovie);
+      service.getById(109088).subscribe((movie: Movie) => {
+        expect(movie.title).toEqual('The Shaolin Avengers');
+        expect(movie.overview).toEqual('any overview');
+      });
     });
 
-    const req = httpTestingController.expectOne(expectedUrl);
-    expect(req.request.method).toEqual('GET');
-    req.flush(mockMovie);
+    it('should handle errors when getting movie by ID', () => {
+      const errorMessage = 'Error fetching movie by ID';
+      (mockHttp.get as Spy).and.returnValue(throwError(errorMessage));
+
+      service.getById(109088).subscribe(
+        () => fail('Should have thrown an error'),
+        (error) => expect(error).toEqual(errorMessage)
+      );
+    });
   });
 
-  it('should search movies by name', () => {
-    const query = 'Avengers';
-    const expectedUrl = `https://api.themoviedb.org/3/search/movie?query=${query}&api_key=f82ecbb7a5110caecaee2bee5e4c79d6`;
-    const mockMovieList: MovieList = mockData
+  describe('searchByName', () => {
+    it('should search movies by name', () => {
+      (mockHttp.get as Spy).and.returnValue(observableOf(mockMoviesList));
 
-    movieService.searchByName(query).subscribe((result) => {
-      expect(result).toEqual(mockMovieList);
+      service.searchByName('The Shaolin Avengers').subscribe((moviesList: MovieList) => {
+        expect(moviesList.results[0].title).toEqual('The Shaolin Avengers');
+      });
     });
 
-    const req = httpTestingController.expectOne(expectedUrl);
-    expect(req.request.method).toEqual('GET');
-    req.flush(mockMovieList);
+    it('should handle errors when searching movies by name', () => {
+      const errorMessage = 'Error searching for movies by name';
+      (mockHttp.get as Spy).and.returnValue(throwError(errorMessage));
+
+      service.searchByName('The Shaolin Avengers').subscribe(
+        () => fail('Should have thrown an error'),
+        (error) => expect(error).toEqual(errorMessage)
+      );
+    });
+
+    it('should handle optional page parameter when searching movies by name', () => {
+      (mockHttp.get as Spy).and.returnValue(observableOf(mockMoviesList));
+
+      service.searchByName('The Shaolin Avengers', 1).subscribe((moviesList: MovieList) => {
+        expect(moviesList.results[0].title).toEqual('The Shaolin Avengers');
+      });
+    });
   });
+
 });
+

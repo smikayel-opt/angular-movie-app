@@ -10,23 +10,28 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [HttpClientModule, CommonModule],
   templateUrl: './movie-details.component.html',
-  styleUrl: './movie-details.component.css'
+  styleUrl: './movie-details.component.scss'
 })
 export class MovieDetailsComponent {
   movie?: Movie;
 
-  constructor(private route: ActivatedRoute, private movieService: MovieService) {
-
-  }
+  constructor (
+    public route: ActivatedRoute,
+    public movieService: MovieService
+  ) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       const movieId = Number(params.get('id'));
       this.getMovie(movieId)
-  });
+    });
   }
 
-  getMovie(id: number) {
+  /**
+   * will get detailed movie from movieService with the movie ID
+   * @param id 
+   */
+  getMovie(id: number): void {
     this.movieService.getById(id).subscribe((movie) => {
       this.movie = movie;
     });
