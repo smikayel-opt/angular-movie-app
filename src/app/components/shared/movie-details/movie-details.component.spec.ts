@@ -23,23 +23,26 @@ describe('MovieDetailsComponent', () => {
     );
   });
 
-  it('should create the component', () => {
+  it('should create an instance of MovieDetailsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call getMovie when ngOnInit is called', () => {
-    spyOn(component, 'getMovie');
-    component.ngOnInit();
-    expect(component.getMovie).toHaveBeenCalled();
+  describe('ngOnInit', () => {
+    it('should call getMovie when ngOnInit is called', () => {
+      spyOn(component, 'getMovie');
+      component.ngOnInit();
+      expect(component.getMovie).toHaveBeenCalled();
+    });
   });
 
-  it('should call movieService.getById with the correct movieId', () => {
-    (component.movieService.getById as Spy).and.returnValue(of(mockMovieData));
+  describe('getMovie', () => {
+    it('should call movieService.getById with the correct movieId', () => {
+      (component.movieService.getById as Spy).and.returnValue(of(mockMovieData));
 
-    component.getMovie(1);
+      component.getMovie(1);
 
-    expect(component.movieService.getById).toHaveBeenCalledWith(1);
-    expect(component.movie).toEqual(mockMovieData);
+      expect(component.movieService.getById).toHaveBeenCalledWith(1);
+      expect(component.movie).toEqual(mockMovieData);
+    });
   });
-
 });
