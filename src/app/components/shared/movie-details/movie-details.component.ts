@@ -15,9 +15,10 @@ import { CommonModule } from '@angular/common';
 export class MovieDetailsComponent {
   movie?: Movie;
 
-  constructor(private route: ActivatedRoute, private movieService: MovieService) {
-
-  }
+  constructor (
+    public route: ActivatedRoute,
+    public movieService: MovieService
+  ) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
